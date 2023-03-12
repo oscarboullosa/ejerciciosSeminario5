@@ -1,5 +1,5 @@
 import { Request,Response } from "express";
-import { insertSubject,getSubject,getSubjects,updateSubject,deleteSubject, matriculateSubject} from "../services/subject";
+import { insertSubject,getSubject,getSubjects,updateSubject,deleteSubject, matriculateSubject, getUsersBySubjectId} from "../services/subject";
 import { handleHttp } from "../utils/error.handle";
 
 const get_Subject = async({params}:Request,res:Response)=>{
@@ -60,5 +60,14 @@ const matriculate_Subject = async ({body}:Request,res:Response)=>{
         handleHttp(res,"ERROR_MATRICULATE_IN_A_SUBJECT");
     }
 };
+const giveMeUsers=async({params}:Request,res:Response)=>{
+    try{
+        const {idSubject}=params;
+        const response=await getUsersBySubjectId(idSubject);
+        res.send(response);
+    } catch(e){
+        handleHttp(res,"ERROR_OBTAINING_USERSS");
+    }
+}
 
-export{get_Subject,get_Subjects,post_Subject,update_Subject,delete_Subject,matriculate_Subject};
+export{get_Subject,get_Subjects,post_Subject,update_Subject,delete_Subject,matriculate_Subject,giveMeUsers};

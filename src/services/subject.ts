@@ -1,6 +1,7 @@
 import { Types } from "mongoose";
 import { Subject } from "../interfaces/subject.interface";
 import SubjectModel from "../models/subject";
+import UserModel from "../models/user";
 
 const insertSubject=async(item:Subject)=>{
     const responseInsert=await SubjectModel.create(item);
@@ -44,4 +45,12 @@ const matriculateSubject=async(idUser:string,idSubject:string)=>{
 };
 
 
-export { insertSubject, getSubject, getSubjects, updateSubject, deleteSubject, matriculateSubject };
+  const getUsersBySubjectId = async (idSubject: string) => {
+    const subject = await SubjectModel.findById(idSubject).populate('users');
+    if (!subject) {
+      throw new Error(`Subject with ID ${idSubject} not found`);
+    }
+    return subject.users;
+  };
+
+export { insertSubject, getSubject, getSubjects, updateSubject, deleteSubject, matriculateSubject,getUsersBySubjectId };
