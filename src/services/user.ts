@@ -2,6 +2,7 @@
 import { User } from "../interfaces/user.interface";
 import UserModel from "../models/user";
 import SubjectModel from "../models/subject";
+import { Types } from "mongoose";
 
 const insertUser = async(item: User) => {
     const responseInsert = await UserModel.create(item);
@@ -42,4 +43,19 @@ const getSubjectsByUserId = async (idUser: string) => {
     return subjects;
   };
 
-export {insertUser, getUser, getUsers, updateUser, deleteUser,getSubjectsByUserId};
+
+  const getUsersByLastNameAndSemester = async (lastName: string, semester: number): Promise<User[]> => {
+    const subjects = await SubjectModel.find({ semester });
+  
+    const users = await Promise.all(subjects.map(async (subject) => {
+      const usersInSubject = await UserModel.find({ _id: { $in: subject.users } });
+      return usersInSubject.filter((user) => user.surname === lastName);
+    }));
+  
+    return users.reduce((acc, usersInSubject) => acc.concat(usersInSubject), []);//Por si se diese el caso de que se apellidan igual dos personas y estan en el mismo semestre o alguna cosa asi mas o menos rara
+//     En resumen esto sería un poco el:
+//     SELECT * FROM tabla_de_personas
+// WHERE apellido = 'Garcia' AND semestre = 8; en SQL
+  };
+  
+export {insertUser, getUser, getUsers, updateUser, deleteUser,getSubjectsByUserId,getUsersByLastNameAndSemester};

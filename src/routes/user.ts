@@ -1,7 +1,7 @@
 /** Esta ruta nos va a devolver un array de objetos, que va a venir de una base de datos (carpeta config)*/
 
 import { Request, Response, Router } from "express";
-import { deletePerson, getPerson, getPeople, postPerson, updatePerson, giveMeSubjects } from "../controllers/user";
+import { deletePerson, getPerson, getPeople, postPerson, updatePerson, giveMeSubjects,answerMyQuestion } from "../controllers/user";
 
 const router = Router(); //es el manejador de las rutas, las interpreta, con esto podremos crear los GET, POST ....
 
@@ -14,5 +14,7 @@ router.post("/",postPerson);
 router.put("/:idUser",updatePerson);
 router.delete("/:idUser",deletePerson);
 router.get("/giveMe/:idUser",giveMeSubjects);
+router.post("/answer",answerMyQuestion);
+
 
 export {router};

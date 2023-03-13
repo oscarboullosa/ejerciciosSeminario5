@@ -1,5 +1,5 @@
 import { request, Request,Response } from "express";
-import { insertUser,getUsers,getUser,updateUser,deleteUser,getSubjectsByUserId} from "../services/user";
+import { insertUser,getUsers,getUser,updateUser,deleteUser,getSubjectsByUserId,getUsersByLastNameAndSemester} from "../services/user";
 import { handleHttp } from "../utils/error.handle";
 
 const getPerson=async({params}:Request,res:Response)=>{
@@ -53,6 +53,7 @@ const deletePerson=async ({params}:Request,res:Response)=>{
 
 const giveMeSubjects=async({params}:Request,res:Response)=>{
     try{
+        
         const {idUser}=params;
         const response=await getSubjectsByUserId(idUser);
         res.send(response);
@@ -61,4 +62,16 @@ const giveMeSubjects=async({params}:Request,res:Response)=>{
     }
 }
 
-export{getPerson,getPeople,postPerson,updatePerson,deletePerson,giveMeSubjects};
+const answerMyQuestion=async ({body}:Request,res:Response)=>{
+    try {
+        const { lastName,semester } = body;
+        const responsy=await getUsersByLastNameAndSemester(lastName,semester);
+        res.send(responsy);
+    } catch (e) {
+        handleHttp(res,"ERROR_ANSWERING");
+    }
+}
+
+
+
+export{getPerson,getPeople,postPerson,updatePerson,deletePerson,giveMeSubjects,answerMyQuestion};

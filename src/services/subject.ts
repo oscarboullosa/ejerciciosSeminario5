@@ -40,6 +40,7 @@ const matriculateSubject=async(idUser:string,idSubject:string)=>{
         {$addToSet: {users: new Types.ObjectId(idUser)}},
         {new: true}
     ).populate('users');
+    
     console.log(responseItem?.users);
     return responseItem;
 };
